@@ -1,0 +1,12 @@
+{
+  "anchor_file": "C:\\Users\\shard\\Light Water Internship\\New folder\\july-backtester\\tickers_to_scan\\russell-3000.json",
+  "anchor_date": "2026-06-29",
+  "anchor_symbols": 2979,
+  "years_built": [
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "warning": "Provisional only. Collected public deltas still do not include every daily deletion, ticker change, correction notice, or missing quarter."
+}

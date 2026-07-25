@@ -1,0 +1,13 @@
+{
+  "source": "Norgate Data historical index constituent time series",
+  "generator": "scripts/build_from_norgate.py",
+  "coverage_requested": {
+    "start_date": "2004-01-01",
+    "end_date": "2026-12-31"
+  },
+  "notes": [
+    "Requires norgatedata plus Norgate Data Updater.",
+    "Requires a Norgate Stocks subscription tier with historical index constituents.",
+    "Static Russell JSON files are intentionally excluded because they are not point-in-time."
+  ]
+}

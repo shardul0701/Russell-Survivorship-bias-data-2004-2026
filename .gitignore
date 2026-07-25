@@ -1,0 +1,17 @@
+# Local/raw source downloads
+source_raw/
+
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local logs/temp outputs
+*.tmp
+*.bak
