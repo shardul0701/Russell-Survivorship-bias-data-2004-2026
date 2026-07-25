@@ -3,15 +3,59 @@
 Point-in-time Russell constituent data generator in the same YAML style as the
 S&P 500 and Nasdaq-100 PIT repos.
 
+## Where The YAML Files Are
+
+The generated PIT YAML files live under `src/`:
+
+- Russell 3000: `src/russell_3000_ticker_history/russell-3000-ticker-changes-YYYY.yaml`
+- Russell 2000: `src/russell_2000_ticker_history/russell-2000-ticker-changes-YYYY.yaml`
+
+There are 46 generated YAML files total:
+
+- 23 Russell 3000 files, 2004-2026
+- 23 Russell 2000 files, 2004-2026
+
+Russell 1000 is not built yet; `src/russell_1000_ticker_history/` is currently
+only a placeholder.
+
+## Read This Before Using
+
+This repository currently contains a **public-source PIT scaffold**, not
+perfect official/Norgate-grade Russell history.
+
+The file format is correct and the generated universes are usable by a
+backtester, but users should be aware of source uncertainty:
+
+- 2004-2009 are the weakest years. No complete public Russell 2000/Russell 3000
+  membership list has been collected for those years yet.
+- Russell 3000 files for 2004-2009 are backfilled from the 2010 public
+  membership anchor, so they are structural placeholders, not true historical
+  2004-2009 rosters.
+- Russell 2000 files for 2004-2012 are backfilled from the 2013 public
+  membership anchor, so they are also placeholders for those years.
+- Russell 3000 files for 2012-2014 carry the 2011 roster until the 2015 anchor
+  because full clean Russell 3000 anchors for those years are still missing.
+- Russell 2000 files for 2015-2017 carry the 2014 roster until the 2018 anchor.
+- Russell 2000 file for 2020 carries the 2019 roster until the 2021 anchor.
+- Russell 2000 files for 2023-2026 carry the 2022 roster because no Russell
+  2000 public delta files were collected.
+- Russell 3000 files for 2023-2026 use public additions/deletions deltas, but
+  annual deltas may miss interim removals, acquisitions, ticker changes,
+  correction notices, and some IPO/quarterly changes.
+
+Every YAML file includes a `metadata` block with its confidence/status. Treat
+files marked `backfilled_scaffold_*`, `carried_forward_no_direct_public_anchor`,
+or `public_delta_derived_from_prior_anchor` with caution.
+
 ## What This Is
 
 This repo is intended to hold Russell 1000, Russell 2000, and Russell 3000
 membership history from 2004 to 2026.
 
-Each generated year file records:
+Each generated year file is intended to record:
 
-- the exact members on January 1 of that year
-- every date in the year where membership changed
+- members on January 1 of that year
+- dated membership changes where collected sources allow them
 
 Static Russell JSON files are not used because they are current-member lists and
 are survivorship-biased.
@@ -65,10 +109,13 @@ changes:
 
 ## Source
 
-Generated from Norgate Data historical index constituent time series. Norgate's
-Python docs describe `index_constituent_timeseries(symbol, indexname)` for this
-purpose and note that historical index constituents require the appropriate
-Stocks subscription tier.
+The committed YAML files are generated from collected public membership anchors,
+manual Scribd downloads, extracted public CSVs, and official/public FTSE Russell
+additions/deletions where available.
+
+The repo also includes a Norgate builder. If historical Norgate constituent
+access is available, `scripts/build_from_norgate.py` should produce stronger
+true PIT history than the current public scaffold.
 
 ## Public-Source Reconstruction
 
