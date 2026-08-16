@@ -1,5 +1,13 @@
 # Russell PIT YAML Build Status
 
+> **Corrected 2026-08-16** — the Coverage sections below originally understated
+> which years are backfilled/carried and misattributed some anchor years. See
+> [issue #68](https://github.com/zachisit/july-backtester-private-strategies/issues/68)
+> for the full audit (jaccard identical-roster check + Norgate delisted-securities
+> census) and the top-level README's "Read This Before Using" section for the
+> corrected, evidence-backed block spans. This file's original build-log summary
+> is left below for reference but should not be read as an accuracy claim.
+
 Generated on 2026-07-25 from collected public anchors and deltas using:
 
 `python scripts/build_pit_from_public_anchors.py`
@@ -76,8 +84,14 @@ python scripts/build_universe.py --index russell2000 2018-06-25
 ## Important Caveat
 
 This is a public-source PIT scaffold, not Norgate-grade truth. The YAML files
-are shaped correctly and usable by the backtester, but years marked
-`backfilled_scaffold_*`, `carried_forward_no_direct_public_anchor`, or
-`public_delta_derived_from_prior_anchor` are not complete true historical
-membership unless better sources are added later.
+are shaped correctly, but years marked `confidence: fabricated_identical_roster_duplicate`
+are **not usable for backtesting** — they are byte-identical copies of a single
+sampled roster stamped across multiple year-labels (see README for the full
+list of affected blocks and the true single-sample anchor year in each).
+Years marked `backfilled_scaffold_*`, `carried_forward_no_direct_public_anchor`,
+or `public_delta_derived_from_prior_anchor` outside those blocks are
+best-effort placeholders — usable with caution, not fabricated.
+`scripts/validate_yaml.py` fails any file that is byte-identical to its
+predecessor without an honest copy-of-a-prior-year label, so silent
+regressions of this kind should not recur.
 
