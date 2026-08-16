@@ -28,7 +28,7 @@ filenames describe a delta-changes format, but the content is a roster
 snapshot (`tickers_on_Jan_1` + `changes`) — don't assume the filename implies
 a pure diff log.
 
-## Read This Before Using — Corrected 2026-08-16 (see issue #68)
+## Read This Before Using — Corrected 2026-08-16
 
 This repository currently contains a **public-source PIT scaffold**, not
 perfect official/Norgate-grade Russell history. An external audit
