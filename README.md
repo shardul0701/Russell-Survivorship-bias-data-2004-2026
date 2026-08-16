@@ -16,36 +16,66 @@ There are 46 generated YAML files total:
 - 23 Russell 2000 files, 2004-2026
 
 Russell 1000 is not built yet; `src/russell_1000_ticker_history/` is currently
-only a placeholder.
+empty (0 files), not a placeholder file. For any year where both Russell 3000
+and Russell 2000 rosters are genuine (non-fabricated), Russell 1000 membership
+can be derived as `R3000 - R2000` for that year as a stopgap.
 
-## Read This Before Using
+The 2026 file carries a full-year roster (3322 R3000 / 2007 R2000 names) even
+though 2026 is not complete. Fine as a scaffold, but a consumer iterating
+years should know this is a forward-looking universe for the current year,
+not a closed historical one. Also note the `*-ticker-changes-YYYY.yaml`
+filenames describe a delta-changes format, but the content is a roster
+snapshot (`tickers_on_Jan_1` + `changes`) — don't assume the filename implies
+a pure diff log.
+
+## Read This Before Using — Corrected 2026-08-16 (see issue #68)
 
 This repository currently contains a **public-source PIT scaffold**, not
-perfect official/Norgate-grade Russell history.
+perfect official/Norgate-grade Russell history. An external audit
+([issue #68](https://github.com/zachisit/july-backtester-private-strategies/issues/68))
+found the scaffold understated its own weaknesses. The findings below are
+corrected against that audit and independently confirmed two ways: a
+jaccard-similarity check across consecutive years, and an exhaustive
+delisted-securities census against Norgate's parquet export (real
+first/last-trade dates for ~36.7k securities).
 
-The file format is correct and the generated universes are usable by a
-backtester, but users should be aware of source uncertainty:
+**Do not use these years for backtesting.** Each block below is *one single
+roster* stamped across multiple year-labels, not independent annual
+snapshots:
 
-- 2004-2009 are the weakest years. No complete public Russell 2000/Russell 3000
-  membership list has been collected for those years yet.
-- Russell 3000 files for 2004-2009 are backfilled from the 2010 public
-  membership anchor, so they are structural placeholders, not true historical
-  2004-2009 rosters.
-- Russell 2000 files for 2004-2012 are backfilled from the 2013 public
-  membership anchor, so they are also placeholders for those years.
-- Russell 3000 files for 2012-2014 carry the 2011 roster until the 2015 anchor
-  because full clean Russell 3000 anchors for those years are still missing.
-- Russell 2000 files for 2015-2017 carry the 2014 roster until the 2018 anchor.
-- Russell 2000 file for 2020 carries the 2019 roster until the 2021 anchor.
-- Russell 2000 files for 2023-2026 carry the 2022 roster because no Russell
-  2000 public delta files were collected.
-- Russell 3000 files for 2023-2026 use public additions/deletions deltas, but
-  annual deltas may miss interim removals, acquisitions, ticker changes,
-  correction notices, and some IPO/quarterly changes.
+| Index | Fabricated years | True single-sample anchor | Evidence |
+| --- | --- | --- | --- |
+| Russell 3000 | 2004-2011 (8 yrs, all byte-identical) | 2010 | census not-trading rate bottoms at 2010 (5.9%), rises to both sides |
+| Russell 3000 | 2012-2015 (4 yrs, all byte-identical) | 2012 | census bottoms at 2012 (8.4%), rises through 2015 (19.0%) |
+| Russell 2000 | 2004-2014 (11 yrs, all byte-identical) | 2013 | census bottoms at 2013 (5.8%) |
+| Russell 2000 | 2015-2018 (4 yrs, all byte-identical) | 2015 | census bottoms at 2015 (8.2%) |
+| Russell 2000 | 2020-2021 (2 yrs, byte-identical) | 2020 | census: 2020 6.8% vs 2021 10.5% |
+| Russell 2000 | 2023-2026 (4 yrs, all byte-identical) | 2023 | census bottoms at 2023 (5.0%) |
 
-Every YAML file includes a `metadata` block with its confidence/status. Treat
-files marked `backfilled_scaffold_*`, `carried_forward_no_direct_public_anchor`,
-or `public_delta_derived_from_prior_anchor` with caution.
+That's roughly **half the dataset by year count** (8/23 R3000 years, 11/23
+R2000 years the largest single culprits), concentrated in the older years —
+which is exactly the range PIT data exists to get right.
+
+**This is not just imprecision — it inverts the survivorship bias the
+dataset exists to remove.** In the R3000 file labeled `2004`: `AVGO`, `VRSK`,
+`RAX`, `SWI` are present despite not having IPO'd until 2008-2009, while
+`LEH`, `BSC`, `MER`, `WB`, `CFC`, `NCC`, `CC` — the 2008-09 financial-crisis
+casualty list — are absent despite unquestionably being Russell 3000 members
+on 2004-01-01. A backtest run against the uncorrected 2004-2011 files buys
+companies years before they listed and can never hold the names that failed —
+the exact error this dataset exists to prevent.
+
+Every YAML file includes a `metadata` block with its confidence/status.
+Years within the blocks above are now labeled `fabricated_identical_roster_duplicate`
+where they previously falsely claimed independent-anchor status, and every
+year inside an identical-roster block (regardless of label) carries an
+explicit "FABRICATED — DO NOT USE FOR BACKTESTING" warning naming the full
+block range. `scripts/validate_yaml.py` fails any file that is
+byte-identical (jaccard = 1.0) to its predecessor without an honest
+copy-of-a-prior-year label, so this class of error cannot silently recur.
+Files still marked `backfilled_scaffold_*`, `carried_forward_no_direct_public_anchor`,
+or `public_delta_derived_from_prior_anchor` outside an identical-roster block
+remain best-effort placeholders — usable with caution, not fabricated.
 
 ## What This Is
 

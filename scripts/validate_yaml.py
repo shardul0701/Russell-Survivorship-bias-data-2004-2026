@@ -16,6 +16,26 @@ INDEXES = {
     "russell3000": ("russell_3000_ticker_history", "russell-3000-ticker-changes", 2400, 3600),
 }
 
+# confidence labels that are already honest about being a copy of a prior
+# year's roster (backfill / carry-forward / a byte-identical duplicate we
+# know about and have flagged). Any OTHER label claiming independent
+# membership data (e.g. "public_membership_anchor",
+# "public_delta_derived_from_prior_anchor") is not allowed to be
+# byte-identical (jaccard == 1.0) to the prior year -- two independently
+# sourced ~2000-3000-name rosters a year apart cannot match exactly.
+_HONEST_ABOUT_BEING_A_COPY = {
+    "backfilled_scaffold_from_2010_anchor",
+    "backfilled_scaffold_from_2013_anchor",
+    "carried_forward_no_direct_public_anchor",
+    "fabricated_identical_roster_duplicate",
+}
+
+
+def jaccard(a: set, b: set) -> float:
+    if not a and not b:
+        return 1.0
+    return len(a & b) / len(a | b)
+
 
 def normalize_index(index: str) -> str:
     key = index.strip().lower().replace("-", "").replace("_", "").replace(" ", "")
@@ -52,6 +72,7 @@ def main() -> int:
     all_ok = True
     prior_final = None
     prior_year = None
+    prior_jan1_set = None
 
     print(f"{index} YAML validation")
     for year in range(2004, 2027):
@@ -82,6 +103,17 @@ def main() -> int:
             extra = sorted(set(jan1) - set(prior_final))[:8]
             errors.append(f"{prior_year}->{year} continuity mismatch missing={missing} extra={extra}")
 
+        confidence = ((data.get("metadata") or {}).get("confidence") or "").strip()
+        jan1_set = set(jan1)
+        if prior_jan1_set is not None:
+            j = jaccard(prior_jan1_set, jan1_set)
+            if j == 1.0 and confidence not in _HONEST_ABOUT_BEING_A_COPY:
+                errors.append(
+                    f"{prior_year}->{year} rosters are byte-identical (jaccard=1.0) but "
+                    f"metadata.confidence={confidence!r} claims independent membership data -- "
+                    f"mislabeled anchor (see issue #68)"
+                )
+
         if errors:
             all_ok = False
             print(f"FAIL {path.name}")
@@ -92,6 +124,7 @@ def main() -> int:
 
         prior_final = final_membership(data)
         prior_year = year
+        prior_jan1_set = jan1_set
 
     return 0 if all_ok else 1
 

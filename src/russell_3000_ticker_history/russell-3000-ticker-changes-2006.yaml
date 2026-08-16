@@ -3005,5 +3005,9 @@ metadata:
   confidence: backfilled_scaffold_from_2010_anchor
   source_notes:
     - Scribd manual PDF extraction of Russell Investments 2010 list
-  warning: Public-source PIT scaffold. Years without direct anchors are carried from
-    nearest collected membership and are not true historical membership.
+  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This exact roster (8
+    names) is byte-identical (jaccard=1.0) across all of 2004-2011
+    (8 consecutive year-labels). At most one year in this range can
+    reflect a real historical snapshot -- possibly none -- and there is no way
+    to determine which from this data alone. See issue #68 for the full audit
+    (zachisit/july-backtester-private-strategies#68).'

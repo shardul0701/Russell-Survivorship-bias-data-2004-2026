@@ -1,13 +1,14 @@
 {
-  "source": "Norgate Data historical index constituent time series",
-  "generator": "scripts/build_from_norgate.py",
+  "source": "Public-source membership anchors (manual Scribd downloads, extracted public CSVs, official/public FTSE Russell additions/deletions)",
+  "generator": "scripts/build_pit_from_public_anchors.py",
   "coverage_requested": {
     "start_date": "2004-01-01",
     "end_date": "2026-12-31"
   },
   "notes": [
-    "Requires norgatedata plus Norgate Data Updater.",
-    "Requires a Norgate Stocks subscription tier with historical index constituents.",
+    "This is NOT Norgate-derived data. scripts/build_from_norgate.py exists but has never been run to produce the committed YAML files in src/.",
+    "If build_from_norgate.py is run in the future to regenerate the committed data, this file's 'source' and 'generator' fields must be updated to match, and re-verified against the jaccard-identity check in validate_yaml.py.",
+    "See audit/PIT_BUILD_STATUS.md and the README for known data-quality issues in the current public-anchor scaffold, including several years with fabricated (non-independent) rosters.",
     "Static Russell JSON files are intentionally excluded because they are not point-in-time."
   ]
 }

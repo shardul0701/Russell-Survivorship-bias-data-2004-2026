@@ -3139,8 +3139,12 @@ changes:
       - ZY
 metadata:
   index: russell2000
-  confidence: public_membership_anchor
+  confidence: fabricated_identical_roster_duplicate
   source_notes:
     - Scribd manual PDF extraction of Russell 2000 2021 list
-  warning: Public-source PIT scaffold. Years without direct anchors are carried from
-    nearest collected membership and are not true historical membership.
+  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This exact roster (2
+    names) is byte-identical (jaccard=1.0) across all of 2020-2021
+    (2 consecutive year-labels). At most one year in this range can
+    reflect a real historical snapshot -- possibly none -- and there is no way
+    to determine which from this data alone. See issue #68 for the full audit
+    (zachisit/july-backtester-private-strategies#68).'
