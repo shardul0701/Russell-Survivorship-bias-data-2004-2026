@@ -4604,12 +4604,11 @@ changes:
       - ZU
 metadata:
   index: russell3000
-  confidence: fabricated_identical_roster_duplicate
+  confidence: fabricated_identical_roster_duplicate_of_2012
   source_notes:
     - Scribd second-batch PDF extraction of Russell 3000 2015 list
-  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This exact roster (4
-    names) is byte-identical (jaccard=1.0) across all of 2012-2015
-    (4 consecutive year-labels). At most one year in this range can
-    reflect a real historical snapshot -- possibly none -- and there is no way
-    to determine which from this data alone. See issue #68 for the full audit
-    (zachisit/july-backtester-private-strategies#68).'
+  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This roster is byte-identical
+    (jaccard=1.0) across all of 2012-2015 (4 consecutive year-labels). The delisted-securities
+    census points to 2012 as the inferred true anchor (8.4%, the range minimum); this
+    year is a copy of that 2012 roster stamped under a different year-label. See issue
+    #68 for the full audit (zachisit/july-backtester-private-strategies#68).'

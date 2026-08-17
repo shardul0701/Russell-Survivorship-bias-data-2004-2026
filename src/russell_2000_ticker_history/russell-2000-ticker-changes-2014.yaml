@@ -2596,12 +2596,11 @@ changes:
       - ZOES
 metadata:
   index: russell2000
-  confidence: fabricated_identical_roster_duplicate
+  confidence: fabricated_identical_roster_duplicate_of_2013
   source_notes:
     - Scribd manual PDF extraction of Russell 2000 2014 list
-  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This exact roster (11
-    names) is byte-identical (jaccard=1.0) across all of 2004-2014
-    (11 consecutive year-labels). At most one year in this range can
-    reflect a real historical snapshot -- possibly none -- and there is no way
-    to determine which from this data alone. See issue #68 for the full audit
-    (zachisit/july-backtester-private-strategies#68).'
+  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This roster is byte-identical
+    (jaccard=1.0) across all of 2004-2014 (11 consecutive year-labels). The delisted-securities
+    census points to 2013 as the inferred true anchor (5.8%, the range minimum); this
+    year is a copy of that 2013 roster stamped under a different year-label. See issue
+    #68 for the full audit (zachisit/july-backtester-private-strategies#68).'

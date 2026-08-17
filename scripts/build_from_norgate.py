@@ -1,5 +1,15 @@
 """Build Russell point-in-time YAML files from Norgate historical membership.
 
+NON-RUNNABLE AS OF 2026-08-17 (issue #68) -- kept for documentation, not use.
+This script requires a live Norgate Data Updater session and a Norgate Stocks
+subscription with historical index constituents. That subscription has since
+lapsed; the parquet export under Norgate's `TICKER-YYYYMM` delisted-security
+naming (see scripts/census_delisted_coverage.py) is the surviving artifact of
+it, not a live data source. Nobody on this project can log in to Norgate to
+run this script, now or later, so "blocked pending access" no longer applies
+-- it is closed. See the "Build From Norgate" section of README.md and issue
+#68 for the rule-based-universe path (issue #70) that replaces it.
+
 This script intentionally uses Norgate's index_constituent_timeseries API, not
 the exported OHLCV parquet files. Price bars and breadth series cannot tell us
 which stocks belonged to the index on each historical date.

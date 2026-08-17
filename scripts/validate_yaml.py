@@ -16,19 +16,29 @@ INDEXES = {
     "russell3000": ("russell_3000_ticker_history", "russell-3000-ticker-changes", 2400, 3600),
 }
 
-# confidence labels that are already honest about being a copy of a prior
-# year's roster (backfill / carry-forward / a byte-identical duplicate we
-# know about and have flagged). Any OTHER label claiming independent
-# membership data (e.g. "public_membership_anchor",
-# "public_delta_derived_from_prior_anchor") is not allowed to be
-# byte-identical (jaccard == 1.0) to the prior year -- two independently
-# sourced ~2000-3000-name rosters a year apart cannot match exactly.
+# confidence labels that are already honest about being part of a known
+# fabricated/identical-roster block -- either a disclosed copy of a prior
+# year's roster, or the one year in the block inferred (from the delisted-
+# securities census, not proven) to be the real one it was copied from. Any
+# OTHER label claiming independent membership data (e.g.
+# "public_membership_anchor", "public_delta_derived_from_prior_anchor") is
+# not allowed to be byte-identical (jaccard == 1.0) to the prior year -- two
+# independently sourced ~2000-3000-name rosters a year apart cannot match
+# exactly.
 _HONEST_ABOUT_BEING_A_COPY = {
     "backfilled_scaffold_from_2010_anchor",
     "backfilled_scaffold_from_2013_anchor",
     "carried_forward_no_direct_public_anchor",
     "fabricated_identical_roster_duplicate",
+    "anchor_inferred_from_delisted_census",
 }
+
+
+def _confidence_is_honest_about_being_a_copy(confidence: str) -> bool:
+    if confidence in _HONEST_ABOUT_BEING_A_COPY:
+        return True
+    # fabricated_identical_roster_duplicate_of_<year>, from relabel_fabricated_blocks.py
+    return confidence.startswith("fabricated_identical_roster_duplicate_of_")
 
 
 def jaccard(a: set, b: set) -> float:
@@ -107,7 +117,7 @@ def main() -> int:
         jan1_set = set(jan1)
         if prior_jan1_set is not None:
             j = jaccard(prior_jan1_set, jan1_set)
-            if j == 1.0 and confidence not in _HONEST_ABOUT_BEING_A_COPY:
+            if j == 1.0 and not _confidence_is_honest_about_being_a_copy(confidence):
                 errors.append(
                     f"{prior_year}->{year} rosters are byte-identical (jaccard=1.0) but "
                     f"metadata.confidence={confidence!r} claims independent membership data -- "

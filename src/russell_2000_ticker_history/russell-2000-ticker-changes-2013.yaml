@@ -1984,12 +1984,14 @@ tickers_on_Jan_1:
 changes: {}
 metadata:
   index: russell2000
-  confidence: fabricated_identical_roster_duplicate
+  confidence: anchor_inferred_from_delisted_census
   source_notes:
     - Scribd manual PDF extraction of Russell 2000 2013 list
-  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This exact roster (11
-    names) is byte-identical (jaccard=1.0) across all of 2004-2014
-    (11 consecutive year-labels). At most one year in this range can
-    reflect a real historical snapshot -- possibly none -- and there is no way
-    to determine which from this data alone. See issue #68 for the full audit
-    (zachisit/july-backtester-private-strategies#68).'
+  warning: 'FABRICATED-BLOCK ANCHOR (INFERRED, NOT PROVEN) -- this roster is stamped
+    across 2004-2014 (11 consecutive year-labels), and this year has the lowest not-trading
+    rate in that range''s delisted-securities census (5.8%), inferred to be the year
+    the roster was actually sampled. This is evidence, not proof -- the census floor
+    is roughly 5-6% noise and the argmin is a heuristic over that noise. Still unusable
+    as a multi-year series: this is a single Jan-1 snapshot copied across 11 years,
+    and every other year in this range is a confirmed duplicate of it. See issue #68
+    for the full audit (zachisit/july-backtester-private-strategies#68).'

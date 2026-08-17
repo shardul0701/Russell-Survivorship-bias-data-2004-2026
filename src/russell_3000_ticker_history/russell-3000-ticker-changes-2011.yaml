@@ -3584,12 +3584,11 @@ changes:
       - ZN
 metadata:
   index: russell3000
-  confidence: fabricated_identical_roster_duplicate
+  confidence: fabricated_identical_roster_duplicate_of_2010
   source_notes:
     - Scribd second-batch PDF extraction of Russell Investments 2011 list
-  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This exact roster (8
-    names) is byte-identical (jaccard=1.0) across all of 2004-2011
-    (8 consecutive year-labels). At most one year in this range can
-    reflect a real historical snapshot -- possibly none -- and there is no way
-    to determine which from this data alone. See issue #68 for the full audit
-    (zachisit/july-backtester-private-strategies#68).'
+  warning: 'FABRICATED -- DO NOT USE FOR BACKTESTING. This roster is byte-identical
+    (jaccard=1.0) across all of 2004-2011 (8 consecutive year-labels). The delisted-securities
+    census points to 2010 as the inferred true anchor (5.9%, the range minimum); this
+    year is a copy of that 2010 roster stamped under a different year-label. See issue
+    #68 for the full audit (zachisit/july-backtester-private-strategies#68).'
