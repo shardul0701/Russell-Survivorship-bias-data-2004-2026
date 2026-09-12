@@ -9,6 +9,7 @@
     "This is NOT Norgate-derived data. scripts/build_from_norgate.py exists but has never been run to produce the committed YAML files in src/.",
     "If build_from_norgate.py is run in the future to regenerate the committed data, this file's 'source' and 'generator' fields must be updated to match, and re-verified against the jaccard-identity check in validate_yaml.py.",
     "See audit/PIT_BUILD_STATUS.md and the README for known data-quality issues in the current public-anchor scaffold, including several years with fabricated (non-independent) rosters.",
-    "Static Russell JSON files are intentionally excluded because they are not point-in-time."
+    "Static Russell JSON files are intentionally excluded because they are not point-in-time.",
+    "The quarterly IPO-addition source URLs are ROLLING, not dated: '.../other/final-ipo-additions-<N>-qtr-r3000.pdf' is overwritten by LSEG each year, so the URL cited on the 2025-09-22, 2025-12-22 and 2026-03-23 rows of ru3000_public_reconstitution_events.csv no longer serves the content those rows were extracted from -- the 3-qtr path now serves the 2026-09-21 list. The annual reconstitution URLs (ru3000-additions-YYYYMMDD.pdf) are dated and do not have this problem. Treat the extracted per-event CSVs in audit/extracted_public_sources/ as the authoritative copy of what was read, and re-verify against a freshly fetched quarterly PDF only after confirming its stated effective date."
   ]
 }
