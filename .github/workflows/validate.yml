@@ -1,0 +1,37 @@
+name: Validate PIT YAML
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Deliberately NOT `pip install -r requirements.txt`. That file pulls
+      # norgatedata, which is a Windows-only client for a locally installed
+      # Norgate Data Updater and cannot install on a Linux runner. The
+      # validator imports argparse, sys, pathlib and yaml only, so pyyaml is
+      # the entire dependency of this job.
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pyyaml
+
+      # russell1000 is intentionally not validated: src/russell_1000_ticker_history/
+      # holds only a .gitkeep, so every year would report "missing". It gets a
+      # job here the day that index is actually built.
+      - name: Validate Russell 3000
+        run: python scripts/validate_yaml.py --index russell3000
+
+      - name: Validate Russell 2000
+        run: python scripts/validate_yaml.py --index russell2000

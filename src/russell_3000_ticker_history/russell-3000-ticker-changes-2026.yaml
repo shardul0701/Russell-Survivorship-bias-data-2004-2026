@@ -3682,10 +3682,50 @@ changes:
       - ZNTL
       - ZSQR
       - ZURA
+  '2026-09-21':
+    difference: []
+    union:
+      - AADX
+      - APMD
+      - BRR
+      - BRUN
+      - BXDC
+      - COAG
+      - CSQR
+      - DPC
+      - EMAT
+      - EROC
+      - FCBM
+      - FRBT
+      - FRVO
+      - GMRS
+      - HAWK
+      - INIO
+      - ITG
+      - JMKE
+      - KARD
+      - LCLN
+      - LFTO
+      - LIME
+      - MOBI
+      - ODTX
+      - PBLS
+      - QNT
+      - REA
+      - REF
+      - SCTX
+      - SPTX
+      - SSMR
+      - SUJA
+      - WHK
 metadata:
   index: russell3000
   confidence: public_delta_derived_from_prior_anchor
   source_notes:
     - Official LSEG/FTSE Russell final Russell 3000 additions/deletions event CSV
+    - 'LSEG/FTSE Russell Final List of IPO Additions, 3rd quarter, Russell 3000,
+      data as at 4 September 2026, effective 2026-09-21 (33 names). Published and
+      final at the time of writing, but the effective date is after 2026-09-12 --
+      a consumer resolving membership before 2026-09-21 is unaffected.'
   warning: Public-source PIT scaffold. Years without direct anchors are carried from
     nearest collected membership and are not true historical membership.

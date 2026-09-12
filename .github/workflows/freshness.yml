@@ -1,0 +1,31 @@
+name: Data freshness
+
+# Nothing in this repository fetches on a schedule -- the public-source
+# collection scripts are run by hand. That is exactly why this check exists:
+# without it, a change series can quietly stop advancing and nothing says so.
+# It runs on its own schedule rather than on push so a stale-data failure shows
+# up in the Actions tab without turning every unrelated push red.
+
+on:
+  schedule:
+    - cron: "17 13 * * 1"   # Mondays 13:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pyyaml
+
+      - name: Check freshness
+        run: python scripts/check_freshness.py --index all

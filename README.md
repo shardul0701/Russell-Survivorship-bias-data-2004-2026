@@ -103,6 +103,29 @@ roster directory with `tickers_on_Jan_1` YAML and a year in the filename,
 including the S&P 500 and NQ100 PIT repos. See the script's own docstring for
 usage and the column-lookup gotcha it documents.
 
+## Automation (GitHub Actions)
+
+Two workflows, both stdlib + `pyyaml` only:
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `.github/workflows/validate.yml` | push to `main`, every PR, manual | `scripts/validate_yaml.py` on russell3000 and russell2000 — year field, sorted/deduped rosters, member-count bounds, year-to-year continuity, and the jaccard=1.0 mislabeled-anchor check from issue #68 |
+| `.github/workflows/freshness.yml` | Mondays 13:17 UTC, manual | `scripts/check_freshness.py` — fails when a change series has gone quiet for longer than FTSE Russell's quarterly publication cadence can explain |
+
+Neither job installs `requirements.txt`: it pulls `norgatedata`, a Windows-only
+client for a locally installed Norgate Data Updater, which cannot install on a
+Linux runner. russell1000 is not validated because
+`src/russell_1000_ticker_history/` holds only a `.gitkeep`.
+
+The freshness threshold (120 days) is calibrated on **FTSE Russell's publishing
+cadence, not on this repo's own change history** — the collected series has
+371- and 364-day gaps in it, but those are collection gaps from years where
+only the annual reconstitution was gathered, not quarters in which the index
+stood still. A threshold fitted to the observed gaps would sleep through a
+wholly missed quarter. Russell 2000 is silenced by name rather than by
+threshold, with its reason (the fabricated 2023–2026 block) and issue #68
+attached, so the note changes the moment a new anchor lands.
+
 ## What This Is
 
 This repo is intended to hold Russell 1000, Russell 2000, and Russell 3000
